@@ -412,7 +412,10 @@ conn_loop(void)
               logw(5, "tty: response timeout", tty.ptrbuf);
 #endif
               if (!tty.trynum)
+              {
+                tty_reinit();
                 modbus_ex_write(actconn->buf, MB_EX_TIMEOUT);
+              }
               else
               { /* retry request */
 #ifdef DEBUG
