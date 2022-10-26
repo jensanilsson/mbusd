@@ -192,6 +192,7 @@ conn_close(conn_t *conn)
   nextconn = queue_next_elem(&queue, conn);
   /* dequeue connection */
   queue_delete_elem(&queue, conn);
+  if (nextconn == conn) nextconn = NULL;
   if (actconn == conn) actconn = nextconn;
   return nextconn;
 }
@@ -916,7 +917,7 @@ conn_fix_request_header_len(conn_t *conn, unsigned char len)
   {
 #ifdef DEBUG
     logw(5, "conn[%s]: request data len changed from %d to %d",
-         MB_FRAME(conn->buf, MB_LENGTH_L), len);
+         conn->remote_addr, MB_FRAME(conn->buf, MB_LENGTH_L), len);
 #endif
     MB_FRAME(conn->buf, MB_LENGTH_L) = len;
   }
